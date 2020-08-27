@@ -21,15 +21,22 @@ class ChangableBackgroundWidget extends StatefulWidget {
 class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
   final Random numbersGenerator = Random();
   Color backgroundColor = Colors.black;
-  // Color textColor = Colors.white;
+  Color textColor = Colors.white;
 
   void _generateColor() {
     setState(() {
-      backgroundColor = Color.fromARGB(
-          numbersGenerator.nextInt(256),
-          numbersGenerator.nextInt(256),
-          numbersGenerator.nextInt(256),
-          numbersGenerator.nextInt(256));
+      final alpha = numbersGenerator.nextInt(256);
+      final red = numbersGenerator.nextInt(256);
+      final green = numbersGenerator.nextInt(256);
+      final blue = numbersGenerator.nextInt(256);
+
+      backgroundColor = Color.fromARGB(alpha, red, green, blue);
+
+      // EXTRA FEATURE: This computation is needed to select text color
+      // depending on background to make the first visible
+      final normalizedAlpha = alpha / 255.0;
+      final grey = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+      textColor = grey * normalizedAlpha < 128 ? Colors.white : Colors.black;
     });
   }
 
@@ -44,7 +51,7 @@ class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
         child: Center(
           child: Text(
             "Hey there",
-            style: TextStyle(),
+            style: TextStyle(color: textColor),
             textDirection: TextDirection.ltr,
           ),
         ),
