@@ -19,9 +19,6 @@ class ChangableBackgroundWidget extends StatefulWidget {
 }
 
 class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
-  // TO DO: finish choosing color types
-  // FIX: the color of the text label
-
   static const List<String> colorTypes = ["Any", "Light", "Dark", "Rainbow"];
   static const List<Color> rainbowColors = [
     Color.fromARGB(255, 255, 0, 0),
@@ -33,7 +30,6 @@ class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
     Color.fromARGB(255, 143, 0, 255),
   ];
 
-  final Random numbersGenerator = Random();
   Color backgroundColor = Colors.black;
   Color textColor = Colors.white;
   String currentColorType = colorTypes[0];
@@ -42,34 +38,34 @@ class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
     setState(() {
       switch (currentColorType) {
         case "Any":
-          final alpha = numbersGenerator.nextInt(256);
-          final red = numbersGenerator.nextInt(256);
-          final green = numbersGenerator.nextInt(256);
-          final blue = numbersGenerator.nextInt(256);
+          final alpha = Random().nextInt(256);
+          final red = Random().nextInt(256);
+          final green = Random().nextInt(256);
+          final blue = Random().nextInt(256);
           backgroundColor = Color.fromARGB(alpha, red, green, blue);
           break;
         case "Rainbow":
           backgroundColor =
-              rainbowColors[numbersGenerator.nextInt(rainbowColors.length - 1)];
+              rainbowColors[Random().nextInt(rainbowColors.length - 1)];
           break;
         case "Light":
           final alpha = 255;
-          final red = 192 + numbersGenerator.nextInt(64);
-          final green = 192 + numbersGenerator.nextInt(64);
-          final blue = 192 + numbersGenerator.nextInt(64);
+          final red = 192 + Random().nextInt(64);
+          final green = 192 + Random().nextInt(64);
+          final blue = 192 + Random().nextInt(64);
           backgroundColor = Color.fromARGB(alpha, red, green, blue);
           break;
         case "Dark":
           final alpha = 128;
-          final red = numbersGenerator.nextInt(128);
-          final green = numbersGenerator.nextInt(128);
-          final blue = numbersGenerator.nextInt(128);
+          final red = Random().nextInt(128);
+          final green = Random().nextInt(128);
+          final blue = Random().nextInt(128);
           backgroundColor = Color.fromARGB(alpha, red, green, blue);
           break;
       }
 
       // This computation is needed to select text color
-      // depending on background to make the first visible
+      // depending on background one to make the first visible
       final normalizedAlpha = backgroundColor.alpha / 255.0;
       final grey = 0.2126 * backgroundColor.red +
           0.7152 * backgroundColor.green +
@@ -85,7 +81,6 @@ class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
       backgroundColor: this.backgroundColor,
       body: GestureDetector(
         child: Container(
-          alignment: Alignment.center,
           decoration: BoxDecoration(color: Colors.transparent),
           child: Center(
             child: Text(
@@ -113,15 +108,15 @@ class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
                 style: TextStyle(fontSize: 16, color: Colors.black),
                 value: currentColorType,
                 items: (_ChangableBackgroundWidgetState.colorTypes)
-                    .map<DropdownMenuItem<String>>((String value) {
+                    .map<DropdownMenuItem<String>>((String colorType) {
                   return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+                    value: colorType,
+                    child: Text(colorType),
                   );
                 }).toList(),
-                onChanged: (value) {
-                  if (currentColorType != value) {
-                    currentColorType = value;
+                onChanged: (newColorType) {
+                  if (currentColorType != newColorType) {
+                    currentColorType = newColorType;
                     _generateColor();
                   }
                 },
