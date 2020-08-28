@@ -46,7 +46,7 @@ class _ChangableBackgroundWidgetState extends State<ChangableBackgroundWidget> {
           break;
         case "Rainbow":
           backgroundColor =
-              rainbowColors[Random().nextInt(rainbowColors.length - 1)];
+              rainbowColors[Random().nextInt(rainbowColors.length)];
           break;
         case "Light":
           final alpha = 255;
